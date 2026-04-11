@@ -57,8 +57,8 @@ jobs:
             exit 1
           fi
 
-          echo "Waiting 15 seconds for propagation..."
-          sleep 15
+          echo "Waiting 300 seconds for propagation..."
+          sleep 300
 
       - name: Deploy via rsync
         run: |
