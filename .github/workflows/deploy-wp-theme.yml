@@ -42,17 +42,22 @@ jobs:
           CURRENT_IP=$(curl -s https://ifconfig.me)
           echo "Current Runner IP: $CURRENT_IP"
 
-          # Allow IP via XREA API (JSON format)
-          curl -X POST https://api.xrea.com/v1/tool/ssh_ip_allow \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"account\": \"$SSH_USER\",
-              \"server_name\": \"$SSH_HOST\",
-              \"api_secret_key\": \"$XREA_API_SECRET_KEY\",
-              \"param\": {
-                \"addr\": \"$CURRENT_IP\"
-              }
-            }"
+          # Allow IP via XREA API (Form data format)
+          RESPONSE=$(curl -sS -X POST \
+            -d "account=$SSH_USER" \
+            -d "server_name=$SSH_HOST" \
+            -d "api_secret_key=$XREA_API_SECRET_KEY" \
+            -d "param[addr]=$CURRENT_IP" \
+            https://api.xrea.com/v1/tool/ssh_ip_allow)
+          
+          echo "API Response: $RESPONSE"
+          
+          # Check for success status code
+          if [[ $RESPONSE != *"status_code\":200"* ]]; then
+            echo "Error: XREA API did not return success."
+            exit 1
+          fi
+
           echo "Waiting 15 seconds for propagation..."
           sleep 15
 
