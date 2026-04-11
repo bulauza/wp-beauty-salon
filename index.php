@@ -11,9 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
   
+  <!-- XREA広告自動挿入の無効化 -->
+  <!--nobanner-->
   <?php wp_head(); ?>
 </head>
 <body class="page">
+  <!-- XREA手動広告挿入 -->
+  <div style="text-align: center; background: #fff;">
+    <script type="text/javascript" src="https://cache1.value-domain.com/xa.j?site=bulauza.s325.xrea.com"></script>
+  </div>
   
   <!-- Header -->
   <header class="header js-header">
