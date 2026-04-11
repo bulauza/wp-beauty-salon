@@ -57,7 +57,9 @@ jobs:
             exit 1
           fi
 
-          echo "Waiting 300 seconds for propagation..."
+      - name: Wait for XREA propagation (5 minutes)
+        run: |
+          echo "Waiting 300 seconds for XREA firewall to apply changes..."
           sleep 300
 
       - name: Deploy via rsync
