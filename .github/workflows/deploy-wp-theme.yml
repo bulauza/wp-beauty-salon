@@ -24,6 +24,7 @@ jobs:
       SSH_PORT: ${{ secrets.SERVER_PORT }}
       SSH_USER: ${{ secrets.SERVER_USER }}
       DEPLOY_DIR: ${{ secrets.SERVER_DIR }}
+      XREA_API_SECRET_KEY: ${{ secrets.XREA_API_SECRET_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,6 +35,26 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Allow SSH IP via XREA API
+        run: |
+          # Get current runner's global IP
+          CURRENT_IP=$(curl -s https://ifconfig.me)
+          echo "Current Runner IP: $CURRENT_IP"
+
+          # Allow IP via XREA API (JSON format)
+          curl -X POST https://api.xrea.com/v1/tool/ssh_ip_allow \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"account\": \"$SSH_USER\",
+              \"server_name\": \"$SSH_HOST\",
+              \"api_secret_key\": \"$XREA_API_SECRET_KEY\",
+              \"param\": {
+                \"addr\": \"$CURRENT_IP\"
+              }
+            }"
+          echo "Waiting 15 seconds for propagation..."
+          sleep 15
 
       - name: Deploy via rsync
         run: |
