@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
       SSH_HOST: ${{ secrets.SERVER_HOST }}
       SSH_PORT: ${{ secrets.SERVER_PORT }}
