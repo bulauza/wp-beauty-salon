@@ -42,13 +42,25 @@ jobs:
           CURRENT_IP=$(curl -s https://ifconfig.me)
           echo "Current Runner IP: $CURRENT_IP"
 
-          # Allow IP via XREA API (Form data format)
-          RESPONSE=$(curl -sS -X POST \
-            -d "account=$SSH_USER" \
-            -d "server_name=$SSH_HOST" \
-            -d "api_secret_key=$XREA_API_SECRET_KEY" \
-            -d "param[addr]=$CURRENT_IP" \
-            https://api.xrea.com/v1/tool/ssh_ip_allow)
+          # Build exact JSON payload as per documentation using jq
+          JSON_DATA=$(jq -n \
+            --arg acc "$SSH_USER" \
+            --arg srv "$SSH_HOST" \
+            --arg key "$XREA_API_SECRET_KEY" \
+            --arg ip "$CURRENT_IP" \
+            '{
+              account: $acc,
+              server_name: $srv,
+              api_secret_key: $key,
+              param: {
+                addr: $ip
+              }
+            }')
+
+          # Send request to XREA API
+          RESPONSE=$(curl -sS -X POST https://api.xrea.com/v1/tool/ssh_ip_allow \
+            -H "Content-Type: application/json" \
+            -d "$JSON_DATA")
           
           echo "API Response: $RESPONSE"
           
