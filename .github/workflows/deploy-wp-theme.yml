@@ -39,32 +39,19 @@ jobs:
       - name: Allow SSH IP via XREA API
         run: |
           # Get current runner's global IP
-          CURRENT_IP=$(curl -s https://ifconfig.me)
-          echo "Current Runner IP: $CURRENT_IP"
+          ALLOW_IP=$(curl -s ifconfig.me | tr -d '\n')
+          echo "Current Runner IP: $ALLOW_IP"
 
-          # Build exact JSON payload as per documentation using jq
-          JSON_DATA=$(jq -n \
-            --arg acc "$SSH_USER" \
-            --arg srv "$SSH_HOST" \
-            --arg key "$XREA_API_SECRET_KEY" \
-            --arg ip "$CURRENT_IP" \
-            '{
-              account: $acc,
-              server_name: $srv,
-              api_secret_key: $key,
-              param: {
-                addr: $ip
-              }
-            }')
-
-          # Send request to XREA API
-          RESPONSE=$(curl -sS -X POST https://api.xrea.com/v1/tool/ssh_ip_allow \
-            -H "Content-Type: application/json" \
-            -d "$JSON_DATA")
+          # Use POST Key-Value format (Form data) as required by XREA API
+          RESPONSE=$(curl -sS -X POST "https://api.xrea.com/v1/tool/ssh_ip_allow" \
+            -d "account=$SSH_USER" \
+            -d "server_name=$SSH_HOST" \
+            -d "api_secret_key=$XREA_API_SECRET_KEY" \
+            -d "param[addr]=$ALLOW_IP")
           
           echo "API Response: $RESPONSE"
           
-          # Check for success status code
+          # Check for success status code in the response
           if [[ $RESPONSE != *"status_code\":200"* ]]; then
             echo "Error: XREA API did not return success."
             exit 1
