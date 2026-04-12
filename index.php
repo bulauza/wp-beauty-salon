@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <!-- XREA広告自動挿入の無効化 -->
+  <!--nobanner-->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="高品質な施術と癒やしの空間を提供する、大人のためのプライベートサロン「Lumière（ルミエール）」。心ゆくまでリラックスできる至福のひとときをご提供します。">
@@ -11,8 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
   
-  <!-- XREA広告自動挿入の無効化 -->
-  <!--nobanner-->
   <?php wp_head(); ?>
 </head>
 <body class="page">
