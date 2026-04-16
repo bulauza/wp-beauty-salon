@@ -16,6 +16,7 @@
   <?php wp_head(); ?>
 </head>
 <body class="page">
+  <?php wp_body_open(); ?>
   <!-- XREA手動広告挿入 -->
   <div style="text-align: center; background: #fff;">
     <script type="text/javascript" src="https://cache1.value-domain.com/xa.j?site=bulauza.s325.xrea.com"></script>
